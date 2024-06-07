@@ -18,11 +18,11 @@ docker run -d -p 4000:5432 --name emarket_db emarket_db
 
 ## 3. Connect to your database as the postgres user or the eMarketApi user
 ```bash
-docker exec -it emarket_db psql -U postgres -d EMarket
+docker exec -it emarket_db psql -U postgres -d emarket
 ```
 or 
 ```bash
-docker exec -it -e PGPASSWORD=>2sPbT5A41N<9-5v emarket_db psql -U api -d EMarket
+docker exec -it -e PGPASSWORD=>2sPbT5A41N<9-5v emarket_db psql -U api -d emarket
 ```
 
 ## 4. Get data from your database
