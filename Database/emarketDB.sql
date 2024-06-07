@@ -11,44 +11,6 @@ CREATE USER api WITH PASSWORD '>2sPbT5A41N<9-5v';
 GRANT ALL PRIVILEGES ON DATABASE emarket TO api;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO api;
 
-CREATE TABLE Countries
-(
-    CountryID   SERIAL PRIMARY KEY,
-    CountryName VARCHAR(100)
-);
-INSERT INTO Countries (CountryName) VALUES ('Poland');
-INSERT INTO Countries (CountryName) VALUES ('Germany');
-INSERT INTO Countries (CountryName) VALUES ('France');
-
-CREATE TABLE Cities
-(
-    CityID    SERIAL PRIMARY KEY,
-    CityName  VARCHAR(100),
-    CountryID INT,
-    FOREIGN KEY (CountryID) REFERENCES
-        Countries (CountryID)
-);
-INSERT INTO Cities (CityName, CountryID) VALUES ('Warsaw', 1);
-INSERT INTO Cities (CityName, CountryID) VALUES ('Krakow', 1);
-INSERT INTO Cities (CityName, CountryID) VALUES ('Lublin', 1);
-INSERT INTO Cities (CityName, CountryID) VALUES ('Berlin', 2);
-INSERT INTO Cities (CityName, CountryID) VALUES ('Paris', 3);
-
-CREATE TABLE Addresses
-(
-    AddressID SERIAL PRIMARY KEY,
-    Address   VARCHAR(255),
-    CityID    INT,
-    FOREIGN KEY (CityID) REFERENCES Cities (CityID)
-);
-INSERT INTO Addresses (Address, CityID) VALUES ('ul. Marszalkowska 1', 1);
-INSERT INTO Addresses (Address, CityID) VALUES ('ul. Wawelska 1', 2);
-INSERT INTO Addresses (Address, CityID) VALUES ('ul. Krakowska 1', 2);
-INSERT INTO Addresses (Address, CityID) VALUES ('ul. Lubelska 1', 3);
-INSERT INTO Addresses (Address, CityID) VALUES ('ul. Nadbystrzycka', 3);
-INSERT INTO Addresses (Address, CityID) VALUES ('Unter den Linden 1', 4);
-INSERT INTO Addresses (Address, CityID) VALUES ('Avenue des Champs-Élysées 1', 5);
-
 CREATE TABLE Customers
 (
     CustomerID SERIAL PRIMARY KEY,
@@ -58,12 +20,11 @@ CREATE TABLE Customers
     Email      VARCHAR(100),
     Phone      VARCHAR(100),
     Password   VARCHAR(100),
-    AddressID  INT,
-    FOREIGN KEY (AddressID) REFERENCES Addresses (AddressID)
+    Address  VARCHAR(100)
 );
-INSERT INTO Customers (FirstName, LastName, UserName, Email, Phone, Password, AddressID) VALUES ('Jan', 'Kowalski', 'jkowalski', '123@123.com', '123123', 'password', 1);
-INSERT INTO Customers (FirstName, LastName, UserName, Email, Phone, Password, AddressID) VALUES ('Anna', 'Nowak', 'anowak', '234@234.com', '234234', 'password', 2);
-INSERT INTO Customers (FirstName, LastName, UserName, Email, Phone, Password, AddressID) VALUES ('Piotr', 'Kowalczyk', 'pkowalczyk', '345@435.com', '345345', 'password', 3);
+INSERT INTO Customers (FirstName, LastName, UserName, Email, Phone, Password, Address) VALUES ('Jan', 'Kowalski', 'jkowalski', '123@123.com', '123123', 'password', 'ul. Marszalkowska 1');
+INSERT INTO Customers (FirstName, LastName, UserName, Email, Phone, Password, Address) VALUES ('Anna', 'Nowak', 'anowak', '234@234.com', '234234', 'password', 'ul. Wawelska 1');
+INSERT INTO Customers (FirstName, LastName, UserName, Email, Phone, Password, Address) VALUES ('Piotr', 'Kowalczyk', 'pkowalczyk', '345@435.com', '345345', 'password', 'ul. Krakowska 1');
 
 CREATE TABLE Admins
 (
@@ -74,11 +35,10 @@ CREATE TABLE Admins
     LastName  VARCHAR(100),
     Email     VARCHAR(100),
     Phone     VARCHAR(100),
-    AddressID INT,
-    FOREIGN KEY (AddressID) REFERENCES Addresses (AddressID),
+    Address VARCHAR(100),
     HourlyWage NUMERIC(10, 2)
 );
-INSERT INTO Admins (UserName, Password, FirstName, LastName, Email, Phone, AddressID, HourlyWage) VALUES ('admin', 'admin', 'Admin', 'Admin', 'admin@admin.com', '123123', 1, 10.00);
+INSERT INTO Admins (UserName, Password, FirstName, LastName, Email, Phone, Address, HourlyWage) VALUES ('admin', 'admin', 'Admin', 'Admin', 'admin@admin.com', '123123', 'ul. Marszalkowska 1', 10.00);
 
 CREATE TABLE Brands
 (
@@ -292,7 +252,7 @@ CREATE TABLE Deliveries
     OrderID            INT,
     DeliveryMethodID   INT,
     DeliveryDate       DATE,
-    DeliveryAddress    VARCHAR(255),
+    DeliveryAddress    VARCHAR(100),
     DeliveryStatus     VARCHAR(255),
     FOREIGN KEY (OrderID) REFERENCES Orders (OrderID),
     FOREIGN KEY (DeliveryMethodID) REFERENCES DeliveryMethods (DeliveryMethodID)
