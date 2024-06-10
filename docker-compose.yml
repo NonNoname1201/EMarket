@@ -1,0 +1,26 @@
+services:
+    server:
+        build: 
+          context: ./Server
+          dockerfile: Dockerfile.express
+        ports:
+            - "4001:3000"
+        depends_on:
+            - db
+        networks:
+            - emarket_network
+        restart: on-failure
+
+    db:
+        build: 
+          context: ./Database
+          dockerfile: Dockerfile.psql
+        ports:
+            - "4000:5432"
+        networks:
+            - emarket_network
+        restart: on-failure
+
+networks:
+    emarket_network:
+        driver: bridge
